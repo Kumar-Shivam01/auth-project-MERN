@@ -1,4 +1,5 @@
 require('dotenv').config()
+const cookieParser = require('cookie-parser');
 const express = require('express')
 const mongoose = require('mongoose')
 
@@ -7,6 +8,7 @@ mongoose.connect(process.env.MONGO_URI,).then(
 )
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/',(req,res)=>{   
     res.send("API running...")

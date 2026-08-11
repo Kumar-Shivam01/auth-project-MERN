@@ -1,6 +1,6 @@
 import User from "../models/userModel";
 const jwt = require('jsonwebtoken') 
-
+const c
 const signToken=(id)=>{
   return jwt.sign({id},process.env.SECRET_STR,{
     expiresIn: process.env.JWT_EXPIRE
@@ -24,7 +24,14 @@ export const register = async (req, res) => {
       });
     }
     const user = await User.create(req.body);
-    signToken(user._id)
+    const token = signToken(user._id)
+    res.cookie('rememberme',token,{
+      httpOnly: true,
+      secure: process.env.NODE_ENV == 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none':'strict',
+      maxAge: 7*24*60*60*1000 //7 days in milliseconds
+    })
+
     res.status(201).json({
       status: "success",
       data: {
