@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     }
     const user = await User.create(req.body);
     const token = signToken(user._id);
-    
+
     res.cookie("rememberme", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV == "production",
@@ -75,7 +75,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days in milliseconds
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: {
         id: user._id,
@@ -90,3 +90,24 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const logout = async (req,res)=>{
+  try{
+    res.clearCookie('rememberme',{
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    })
+    return res.status(200).json({
+      status: "success",
+      message: "logged out"
+    });
+  }catch(error){
+    res.status(500).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+}
+
+
