@@ -1,5 +1,5 @@
-import User from "../models/userModel";
-const jwt = require("jsonwebtoken");
+const User = require('../models/userModel.js');
+const jwt = require('jsonwebtoken');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_STR, {
@@ -7,7 +7,7 @@ const signToken = (id) => {
   });
 };
 
-export const register = async (req, res) => {
+exports.register = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -15,7 +15,7 @@ export const register = async (req, res) => {
       status: "fail",
       message: "Missing details",
     });
-  }
+  }   
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -50,7 +50,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -91,7 +91,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req,res)=>{
+exports.logout = async (req,res)=>{
   try{
     res.clearCookie('rememberme',{
       httpOnly: true,
