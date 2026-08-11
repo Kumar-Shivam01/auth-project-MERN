@@ -5,11 +5,10 @@ const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI,).then(
     ()=>console.log('DB connection successfull!')
 )
-
 const app = express();
 app.use(express.json());
 
-app.get('/',(req,res)=>{  
+app.get('/',(req,res)=>{   
     res.send("API running...")
 })
 app.listen(process.env.PORT,()=>console.log(`server running on http://localhost:${process.env.PORT}`))
