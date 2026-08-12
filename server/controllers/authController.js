@@ -118,8 +118,7 @@ exports.logout = async (req, res) => {
 //send verification OPT to the user's email
 exports.sendVerifyOtp = async (req, res) => {
   try {
-    const { id } = req.body;
-    const user = await User.findById(id);
+    const user = await User.findById(req.userId);
     if (user.isAccountVerified) {
       //check if the user is already verified
       return res.json({
@@ -151,15 +150,15 @@ exports.sendVerifyOtp = async (req, res) => {
   }
 };
 exports.verifyEmail = async (req, res) => {
-  const { id, otp } = req.body;
-  if (!id || !otp) {
+  const { otp } = req.body;
+  if (!req.userId || !otp) {
     return res.status(400).json({
       status: "fail",
       message: "Missing user details",
     });
   }
-  try {
-    const user = await User.findById(id);
+  try { 
+    const user = await User.findById(req.userId);
     if(!user){
       return res.status(404).json({
         status: 'fail',
