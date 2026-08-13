@@ -8,4 +8,6 @@ router.route('/login').post(controller.login)
 router.route('/logout').post(controller.logout) 
 router.route('/send-verify-otp').post(userAuth,controller.sendVerifyOtp)
 router.route('/verify-account').post(userAuth,controller.verifyEmail)
+router.route('/is-auth').post(userAuth,controller.isAuthenticated)
+
 module.exports = router   

@@ -193,3 +193,57 @@ exports.verifyEmail = async (req, res) => {
     });
   }
 };
+//check if user is authenticated
+exports.isAuthenticated = async(req,res)=>{
+  try{
+    return res.status(200).json({
+      status: 'success',
+      message: 'user is authenticated'
+    })
+  }catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+}
+exports.sendResetPasswordOtp = async (req,res)=>{
+      const {email} = req.body;
+      if(!email){
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Email is required'
+        })
+      }
+      try{
+          const user = await User.findOne({email});
+          if(!user){
+            return res.status(400).json({
+              status: 'fail',
+              message: 'user not found'
+            })
+          }
+          const otp = String(Math.floor(100000+Math.random()*900000))
+          user.resetOtp = otp;
+          user.resetOtpExpireAt = Date.now()+1*60*60*1000
+
+          await user.save()
+
+          await sendEmail({
+            //setting email options 
+            email: user.email,
+            subject: "Password reset OTP",
+            message: `your OTP is ${otp}. Reset your password using this OTP.`,
+          });
+          return res.status(200).json({
+                 status: 'success',
+                 message: 'OTP sent to your email'
+          })
+      }catch(error){
+         res.status(500).json({
+         status: "fail",
+         message: error.message,
+       });
+      }
+}
+

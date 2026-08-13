@@ -16,7 +16,7 @@ exports.userAuth = async (req, res, next) => {
         message: "Not authorized. Login again.",
       });
     }
-    req.userId = decodedToken.id;
+    req.userId = decodedToken.id; //creating a new property called userId on the request object
     next();
   } catch (error) {
     res.status(500).json({
