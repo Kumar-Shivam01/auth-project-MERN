@@ -2,7 +2,8 @@ require('dotenv').config()
 const cookieParser = require('cookie-parser');
 const express = require('express')
 const mongoose = require('mongoose')
-const authRouter = require('./routes/authRoutes') 
+const authRouter = require('./routes/authRoutes'); 
+const userRouter = require('./routes/userRoutes');
 
 mongoose.connect(process.env.MONGO_URI,).then(
     ()=>console.log('DB connection successfull!')
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth',authRouter) //mounting routes in express
-
+app.use('/api/user',userRouter)
 app.get('/',(req,res)=>{   
     res.send("API running...")
 })
