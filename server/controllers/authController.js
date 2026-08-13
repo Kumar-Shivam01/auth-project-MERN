@@ -246,4 +246,49 @@ exports.sendResetPasswordOtp = async (req,res)=>{
        });
       }
 }
+//Reset user password
+exports.resetPassword = async (req,res)=>{
+  const {email,otp,newPassword} = req.body
+  if(!email || !otp || !newPassword){
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Email, OTP and newPassword are required'
+    })
+  }
+  try{
+    const user = await User.findOne({email});
+    if(!user){
+        return res.status(400).json({
+        status: 'fail',
+        message: 'user not found'
+      })
+    }
+    if(user.resetOtp === '' || user.resetOtp !== otp){
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Invalid OTP'
+      })
+    }
+    if(user.resetOtpExpireAt < Date.now()){
+      return res.status(404).json({
+        status: 'fail',
+        message: 'OTP has expired'
+      })
+    }
+    user.password = req.body.newPassword;
+    user.resetOtp = ''
+    user.resetOtpExpireAt = 0
+    
+    await user.save()
+    return res.status(200).json({
+        status: 'success',
+        message: 'Password changed successfully!'
+    })
+  }catch(error){
+      res.status(500).json({
+         status: "fail",
+         message: error.message,
+       });
+  }
+}
 
