@@ -1,14 +1,45 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import logo from "../assets/web-app-manifest.png";
 import { useNavigate } from 'react-router-dom'
+import { AppContent } from "../context/AppContext";
+import axios from 'axios'
+import {toast} from 'react-toastify'
+
 const Login = () => {
   
   const navigate = useNavigate();
+  const {backendUrl,setIsLoggedIn} = useContext(AppContent)
 
   const [state, setState] = useState("Sign Up");
   const [name,setName] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
+
+  const onSubmitHandler = async (e)=>{
+    try{
+      e.preventDefault()
+      if(state === 'Sign Up'){
+       const {data} =  await axios.post(backendUrl+'/api/auth/register', {email,name,password}, { withCredentials: true })
+
+       if(data.status === 'success'){
+        setIsLoggedIn(true);
+        navigate('/')
+       }else{
+        toast.error(data.message)
+       }
+      }else{
+        const {data} = await axios.post(backendUrl+'/api/auth/login',{email,password}, { withCredentials: true });
+        if(data.status === 'success'){
+          setIsLoggedIn(true)
+          navigate('/')
+        }else{
+          toast.error(data.message)
+        }
+      }
+    }catch(error){
+      toast.error(error.response?.data?.message || 'Unable to reach the server. Make sure the backend is running.')
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br  from-white to-blue-400">
@@ -34,7 +65,7 @@ const Login = () => {
             : "Login to your account"}
         </p>
 
-        <form>
+        <form onSubmit={onSubmitHandler}>
           {state === "Sign Up" && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-cyan-950">
               <span>👤</span>
