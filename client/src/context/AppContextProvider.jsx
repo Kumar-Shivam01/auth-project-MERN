@@ -7,6 +7,10 @@ export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(false);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+  useEffect(() => {
+    axios.defaults.withCredentials = true;
+  }, []);
+
   const getUserData=async ()=>{
     try{
       const {data} = await axios.get(backendUrl+'/api/user/user-data',{withCredentials: true})

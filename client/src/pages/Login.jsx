@@ -14,7 +14,7 @@ const Login = () => {
   const [name,setName] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-
+  const [showPassword,setShowPassword] = useState(false);
   const onSubmitHandler = async (e)=>{
     try{
       e.preventDefault()
@@ -99,10 +99,11 @@ const Login = () => {
               onChange={(e)=>setPassword(e.target.value)}
               value={password}
               className="bg-transparent outline-none"
-              type="text"
+              type={showPassword?'text':'password'}
               placeholder="Password"
               required
             />
+            <span  className="cursor-pointer" onClick={()=>setShowPassword(!showPassword)}>{showPassword?"Hide":"Show"}</span>
           </div>
           <p onClick={()=>navigate('/reset-password')} className="mb-4 cursor-pointer text-indigo-500">
             Forgot Password?
