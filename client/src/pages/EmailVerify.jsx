@@ -1,5 +1,34 @@
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/web-app-manifest.png";
+
 export const EmailVerify = () => {
+  const navigate = useNavigate();
   return (
-    <div>EmailVerify Page</div>
-  )
-}
+    <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br  from-white to-blue-400">
+      <div className="absolute left-5 top-5 flex items-center sm:left-20">
+        <img
+          src={logo}
+          onClick={() => navigate("/")}
+          alt="Auth logo"
+          className="h-15 w-15 shrink-0 cursor-pointer"
+        />
+        <span
+          onClick={() => navigate("/")}
+          className=" cursor-pointer ml-3 min-w-40 text-4xl font-bold tracking-wide text-black sm:min-w-56 sm:text-3xl"
+        >
+          Auth
+        </span>
+      </div>
+      <form className="bg-slate-900 p-8 rounded-lg w-96 text-sm" action="">
+        <h1 className="text-white text-2xl font-semibold text-center mb-4">Email Verify OTP</h1>
+        <p className="text-center mb-6 text-indigo-300">Enter the 6-digit code sent to your Email Id.</p>
+        <div className="flex justify-between mb-8">
+          {Array(6).fill(0).map((_,index)=>(
+            <input className="w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md" type="text" maxLength='1' key={index} required/>
+          ))}
+        </div>
+        <button className="w-full py-3 bg-linear-to-r from-indigo-500 to-indigo-900 text-white rounded-full">Verify Email</button>
+      </form>
+    </div>
+  );
+};
