@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/web-app-manifest.png";
-import React from "react";
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
+import { AppContent } from "../context/AppContext";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export const EmailVerify = () => {
+  const {backendUrl,getUserData} = useContext(AppContent)
   const navigate = useNavigate();
   const inputRefs = React.useRef([]);
 
@@ -25,6 +30,24 @@ export const EmailVerify = () => {
       }
     })
   }
+  const onSubmitHandler = async(e)=>{
+    try{
+      e.preventDefault()
+      const otpArray = inputRefs.current.map(e=>e.value)
+      const otp = otpArray.join('')
+
+      const {data} = await axios.post(backendUrl+'/api/auth/verify-account',{otp})
+      if(data.status === 'success'){
+        toast.success(data.message)
+        getUserData()
+        navigate('/')
+      }else{
+        toast.error(data.message)
+      }
+    }catch(error){
+      toast.error(error.response?.data?.message || 'Something went wrong')
+    }
+  }
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br  from-white to-blue-400">
       <div className="absolute left-5 top-5 flex items-center sm:left-20">
@@ -41,7 +64,7 @@ export const EmailVerify = () => {
           Auth
         </span>
       </div>
-      <form className="bg-slate-900 p-8 rounded-lg w-96 text-sm" action="">
+      <form onSubmit={onSubmitHandler} className="bg-slate-900 p-8 rounded-lg w-96 text-sm" action="">
         <h1 className="text-white text-2xl font-semibold text-center mb-4">
           Email Verify OTP
         </h1>
