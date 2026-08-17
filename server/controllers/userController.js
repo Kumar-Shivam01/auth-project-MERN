@@ -14,8 +14,8 @@ exports.getUserData = async(req,res)=>{
             status: 'success',
             userData: {
                 name: user.name,
-                emial: user.email,
-                AccountVerified: user.isAccountVerified
+                email: user.email,
+                isAccountVerified: user.isAccountVerified
             }
         })
     }catch(error){
