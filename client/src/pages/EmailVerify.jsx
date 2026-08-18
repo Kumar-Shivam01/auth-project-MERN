@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/web-app-manifest.png";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import { AppContent } from "../context/AppContext";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
 export const EmailVerify = () => {
-  const {backendUrl,getUserData} = useContext(AppContent)
+  const {backendUrl,getUserData,isLoggedIn,userData} = useContext(AppContent)
   const navigate = useNavigate();
   const inputRefs = React.useRef([]);
 
@@ -48,6 +48,10 @@ export const EmailVerify = () => {
       toast.error(error.response?.data?.message || 'Something went wrong')
     }
   }
+  useEffect(()=>{
+    isLoggedIn && userData && userData.isAccountVerified && navigate('/')
+  },[isLoggedIn, userData, navigate])
+
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br  from-white to-blue-400">
       <div className="absolute left-5 top-5 flex items-center sm:left-20">
