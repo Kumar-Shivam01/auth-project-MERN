@@ -1,6 +1,16 @@
 const User = require("../models/userModel.js");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("./../config/email.js");
+const {
+  EMAIL_VERIFY_TEMPLATE,
+  RESET_PASSWORD_TEMPLATE,
+} = require('../config/emailTemplates.js');
+
+const renderEmailTemplate = (template, values) =>
+  Object.entries(values).reduce(
+    (html, [placeholder, value]) => html.replaceAll(`{{${placeholder}}}`, String(value)),
+    template,
+  );
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_STR, {
     expiresIn: process.env.JWT_EXPIRE,
@@ -136,7 +146,13 @@ exports.sendVerifyOtp = async (req, res) => {
       //setting email options 
       email: user.email,
       subject: "Account verification OTP",
-      message: `your otp is ${otp}. Verify your account using this otp.`,
+      html: renderEmailTemplate(EMAIL_VERIFY_TEMPLATE, {
+        otpCode: otp,
+        expiryMinutes: 60,
+        userName: user.name,
+        currentYear: new Date().getFullYear(),
+        email: user.email,
+      }),
     });
     res.status(200).json({
       status: "success",
@@ -233,7 +249,12 @@ exports.sendResetPasswordOtp = async (req,res)=>{
             //setting email options 
             email: user.email,
             subject: "Password reset OTP",
-            message: `your OTP is ${otp}. Reset your password using this OTP.`,
+            html: renderEmailTemplate(RESET_PASSWORD_TEMPLATE, {
+              otpCode: otp,
+              expiryMinutes: 60,
+              userName: user.name,
+              currentYear: new Date().getFullYear(),
+            }),
           });
           return res.status(200).json({
                  status: 'success',

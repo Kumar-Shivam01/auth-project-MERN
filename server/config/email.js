@@ -15,7 +15,8 @@ const sendEmail = async (options)=>{
         from: 'Auth support<support@Auth_MERN.com>',
         to: options.email,
         subject: options.subject,
-        text: options.message
+        text: options.message,
+        html: options.html,
     }
     await transporter.sendMail(emailOptions)
 }
