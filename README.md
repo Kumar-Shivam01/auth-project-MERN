@@ -136,5 +136,5 @@ A secure, full-stack authentication system built with the **MERN stack** (MongoD
 
 ## 🙋 Author
 
-**<Your Name>**
-[GitHub](https://github.com/Kumar-Shivam01) · [LinkedIn](https://linkedin.com/in/<your-linkedin>)
+**<Kumar Shivam>**
+[GitHub](https://github.com/Kumar-Shivam01) · [LinkedIn](www.linkedin.com/in/kumar-shivam-516b39324)
