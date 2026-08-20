@@ -48,7 +48,7 @@ A secure, full-stack authentication system built with the **MERN stack** (MongoD
 
 | Layer | Technology |
 |---|---|
-| Frontend | React |
+| Frontend | React, Tailwind CSS |
 | Backend | Node.js, Express.js |
 | Database | MongoDB with Mongoose ODM |
 | Auth | JSON Web Tokens (JWT) |
